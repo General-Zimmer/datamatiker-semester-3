@@ -10,34 +10,41 @@ public class PrintInputThread extends Thread {
     private final String inputName;
     private final BufferedReader input;
     private boolean canCloseSocket = false;
-    public PrintInputThread(Socket sock, String inputName) throws IOException {
+    public PrintInputThread(Socket sock, String inputName, BufferedReader input) {
         this.sock = sock;
-        input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+        this.input = input;
         this.inputName = inputName;
     }
-    public PrintInputThread(Socket sock, String inputName, boolean canCloseSocket) throws IOException {
-        this(sock, inputName);
+
+
+
+    public PrintInputThread(Socket sock, String inputName,BufferedReader input , boolean canCloseSocket) {
+        this(sock, inputName, input);
         this.canCloseSocket = canCloseSocket;
     }
 
     public void run() {
         synchronized (this) {
             try {
+                String inputString = "";
                 do {
-                    String inputString = input.readLine();
-                    if (inputString.isBlank()) {
-                        wait(500);
-                    } else if (inputString.equals("quit") && canCloseSocket) {
+                    inputString = input.readLine();
+
+                    if (inputString == null) {
                         sock.close();
+                    } else if (inputString.isBlank()) {
+                        wait(500);
                     } else {
                         System.out.println("Message from " + inputName + ": " + inputString);
                     }
                 } while (!sock.isClosed());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println(e.getMessage());
             } catch (InterruptedException e) {
                 System.out.println("thread stopped");
+                this.interrupt();
             }
         }
     }
+
 }

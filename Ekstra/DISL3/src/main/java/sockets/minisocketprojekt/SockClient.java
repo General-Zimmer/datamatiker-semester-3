@@ -8,20 +8,35 @@ import java.net.Socket;
 
 public class SockClient {
     public static void main(String[] args) throws IOException {
-        String sentence;
         BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-        Socket clientSocket= new Socket("localhost",6969);
+        System.out.print("Gib your name: ");
+        String name = inFromUser.readLine();
+        Socket clientSocket = new Socket("localhost",6969);
         DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-        Thread autoPrintThread = new PrintInputThread(clientSocket, "Server");
+        BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        System.out.println("Connected to server");
+        outToServer.writeBytes("Snakke " + name + "\n");
+
+        String response = inputFromServer.readLine();
+        if (response.equals("Nej"))
+            clientSocket.close();
+
+        Thread autoPrintThread = new PrintInputThread(clientSocket, "Server", inputFromServer);
         autoPrintThread.start();
+        System.out.println("Type to send message");
 
         try (clientSocket) {
+            String sentence;
             do {
+
                 sentence = inFromUser.readLine();
                 outToServer.writeBytes(sentence + '\n');
             } while (!sentence.equalsIgnoreCase("quit"));
             System.out.println("Closing socket");
-        } finally {
-            autoPrintThread.interrupt();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }}
+
+
+    }
+}
