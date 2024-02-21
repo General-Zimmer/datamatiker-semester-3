@@ -29,7 +29,6 @@ public class PrintInputThread extends Thread {
                 String inputString = "";
                 do {
                     inputString = input.readLine();
-
                     if (inputString == null) {
                         sock.close();
                     } else if (inputString.isBlank()) {

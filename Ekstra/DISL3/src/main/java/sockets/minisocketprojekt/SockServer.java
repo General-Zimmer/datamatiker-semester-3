@@ -21,8 +21,9 @@ public class SockServer {
         String response = inputFromClient.readLine();
 
         System.out.println("Client says: " + response);
-        if (response.startsWith("Snakke ")) {
-            String clientName = response.substring(7);
+        String clientName = "client";
+        if (response.startsWith("Snakke ") && response.length() > 7) {
+            clientName = response.substring(7);
             System.out.println(clientName + " wants to talk. Ja/Nej?");
             String noYes = inFromServer.readLine();
 
@@ -30,6 +31,7 @@ public class SockServer {
                 outToClient.writeBytes("Nej" + '\n');
             } else if (noYes.equals("Ja")) {
                 outToClient.writeBytes("Ja" + '\n');
+                System.out.println("Type to send message");
             } else {
                 System.out.println("Invalid response. Saying Ja");
                 outToClient.writeBytes("Ja" + '\n');
@@ -41,11 +43,11 @@ public class SockServer {
         }
 
 
-        PrintInputThread autoPrintThread = new PrintInputThread(connectionSocket, "client", inputFromClient, true);
+        PrintInputThread autoPrintThread = new PrintInputThread(connectionSocket, clientName, inputFromClient, true);
         autoPrintThread.start();
 
-        System.out.println("Type to send message");
-        
+
+
         while (!connectionSocket.isClosed()) {
             String sentence = "";
             if (inFromServer.ready())

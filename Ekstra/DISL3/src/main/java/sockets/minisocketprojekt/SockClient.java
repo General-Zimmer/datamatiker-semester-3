@@ -18,12 +18,19 @@ public class SockClient {
         outToServer.writeBytes("Snakke " + name + "\n");
 
         String response = inputFromServer.readLine();
-        if (response.equals("Nej"))
+        if (response.equals("Nej")) {
             clientSocket.close();
+        } else if (response.equals("Ja")) {
+            System.out.println("Connection successful");
+            System.out.println("Type to send message");
+        } else {
+            System.out.println("Invalid response. Closing connection");
+            clientSocket.close();
+        }
 
         Thread autoPrintThread = new PrintInputThread(clientSocket, "Server", inputFromServer);
         autoPrintThread.start();
-        System.out.println("Type to send message");
+
 
         try (clientSocket) {
             String sentence;
