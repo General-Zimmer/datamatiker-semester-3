@@ -20,6 +20,7 @@ public class SockClient {
         String response = inputFromServer.readLine();
         if (response.equals("Nej")) {
             clientSocket.close();
+            System.out.println("Connection refused");
         } else if (response.equals("Ja")) {
             System.out.println("Connection successful");
             System.out.println("Type to send message");
@@ -32,11 +33,13 @@ public class SockClient {
         autoPrintThread.start();
 
         try (clientSocket) {
-            String sentence;
+            String sentence = "";
             do {
-                sentence = inFromUser.readLine();
-                outToServer.writeBytes(sentence + '\n');
-            } while (!sentence.equalsIgnoreCase("quit"));
+                if (inFromUser.ready())
+                    sentence = inFromUser.readLine();
+                if (!sentence.isBlank())
+                    outToServer.writeBytes(sentence + '\n');
+            } while (!sentence.equalsIgnoreCase("quit") && !clientSocket.isClosed());
             System.out.println("Closing socket");
         } catch (IOException e) {
             e.printStackTrace();

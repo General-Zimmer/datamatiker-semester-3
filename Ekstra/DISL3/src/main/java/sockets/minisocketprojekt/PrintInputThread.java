@@ -19,16 +19,11 @@ public class PrintInputThread extends Thread {
             try {
                 String inputString = "";
                 do {
-                    inputString = "";
-
-                    if (input.ready()) {
-                        inputString = input.readLine();
-                    }
-
+                    inputString = input.readLine();
                     if (inputString == null) {
                         sock.close();
                     } else if (inputString.isBlank()) {
-                        wait(100);
+                        wait(500);
                     } else {
                         System.out.println("Message from " + inputName + ": " + inputString);
                     }
