@@ -17,7 +17,7 @@ public class PrintInputThread extends Thread {
     public void run() {
         synchronized (this) {
             try {
-                String inputString = "";
+                String inputString;
                 do {
                     inputString = input.readLine();
                     if (inputString == null) {

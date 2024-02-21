@@ -42,7 +42,7 @@ public class SockClient {
             } while (!sentence.equalsIgnoreCase("quit") && !clientSocket.isClosed());
             System.out.println("Closing socket");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }
