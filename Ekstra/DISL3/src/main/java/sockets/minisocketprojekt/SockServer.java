@@ -12,7 +12,21 @@ public class SockServer {
         // setup things
         ServerSocket serverSocket = new ServerSocket(6969);
         System.out.println("Waiting for connection");
-        Socket connectionSocket = serverSocket.accept();
+
+        Socket nameServerSuck = new Socket("localhost", 469);
+
+        DataOutputStream outToNameServer = new DataOutputStream(nameServerSuck.getOutputStream());
+        BufferedReader inputFromNameServer = new BufferedReader(new InputStreamReader(nameServerSuck.getInputStream()));
+        outToNameServer.writeBytes("Register " + "ZimmyHost" + "n" +  "10.10.138.242" + '\n');
+        String nameServerRespond = inputFromNameServer.readLine();
+        if (nameServerRespond.equals("Registered")) {
+            System.out.println("Registered with name server");
+        } else {
+            System.out.println("Failed to register with name server");
+            return;
+        }
+
+        Socket connectionSocket = serverSocket.accept() ;
         System.out.println("Connection established");
         DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
         BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));

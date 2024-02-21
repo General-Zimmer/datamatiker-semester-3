@@ -9,17 +9,36 @@ import java.net.Socket;
 public class SockClient {
     public static void main(String[] args) throws IOException {
         // setup things
+        String IP = "localhost";
         BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Gib your name: ");
-        String name = inFromUser.readLine();
+        String ourName = inFromUser.readLine();
+
+        System.out.print("Gib name of who you wanna talk to: ");
+        String Servername = inFromUser.readLine();
+
+        Socket nameServerSuck = new Socket("localhost", 469);
+        DataOutputStream outToNameServer = new DataOutputStream(nameServerSuck.getOutputStream());
+        BufferedReader inputFromNameServer = new BufferedReader(new InputStreamReader(nameServerSuck.getInputStream()));
+        outToNameServer.writeBytes("Lookup " + Servername + '\n');
+        String nameServerRespond = inputFromNameServer.readLine();
+        if (nameServerRespond.equals("Client not found")) {
+            System.out.println("Client not found");
+            return;
+        } else {
+            System.out.println("Found client with IP " + nameServerRespond);
+            IP = nameServerRespond;
+        }
+
+
 
         // Connect to server
-        Socket clientSocket = new Socket("10.10.139.215",6969);
+        Socket clientSocket = new Socket( IP,6969);
         DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
         BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         System.out.println("Connected to server");
         // Send snakke request to server
-        outToServer.writeBytes("Snakke " + name + "\n");
+        outToServer.writeBytes("Snakke " + ourName + "\n");
 
         // Check if server wants to talk
         String response = inputFromServer.readLine();

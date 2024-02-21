@@ -24,17 +24,19 @@ public class PrintInputThread extends Thread {
                     inputString = input.readLine();
                     if (inputString == null) {
                         sock.close();
-                    } else if (inputString.isBlank()) {
-                        wait(500);
                     } else {
                         System.out.println("Message from " + inputName + ": " + inputString);
                     }
                 } while (!sock.isClosed());
             } catch (IOException e) {
+                if (e.getMessage().equals("Connection reset")) {
+                    try {
+                        sock.close();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
                 System.out.println(e.getMessage());
-            } catch (InterruptedException e) {
-                System.out.println("thread stopped");
-                this.interrupt();
             }
         }
     }
