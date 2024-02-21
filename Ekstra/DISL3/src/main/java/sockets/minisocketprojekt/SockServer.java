@@ -9,6 +9,7 @@ import java.net.Socket;
 
 public class SockServer {
     public static void main(String[] args) throws IOException {
+        // setup things
         ServerSocket serverSocket = new ServerSocket(6969);
         Socket connectionSocket = serverSocket.accept();
         System.out.println("Connection established");
@@ -16,8 +17,8 @@ public class SockServer {
         BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
         BufferedReader inFromServer = new BufferedReader(new InputStreamReader(System.in));
 
+        // Check client protocol and respond back
         String response = inputFromClient.readLine();
-
         String clientName = "client";
         if (response.startsWith("Snakke ") && response.length() > 7) {
             clientName = response.substring(7);
@@ -39,9 +40,10 @@ public class SockServer {
             connectionSocket.close();
         }
 
-        PrintInputThread autoPrintThread = new PrintInputThread(connectionSocket, clientName, inputFromClient);
-        autoPrintThread.start();
+        // Start thread to receive messages
+        new PrintInputThread(connectionSocket, clientName, inputFromClient).start();
 
+        // Send messages to client
         while (!connectionSocket.isClosed()) {
             String sentence = "";
             if (inFromServer.ready())
