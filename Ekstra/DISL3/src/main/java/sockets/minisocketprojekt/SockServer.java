@@ -18,7 +18,6 @@ public class SockServer {
 
         String response = inputFromClient.readLine();
 
-        System.out.println("Client says: " + response);
         String clientName = "client";
         if (response.startsWith("Snakke ") && response.length() > 7) {
             clientName = response.substring(7);
@@ -40,11 +39,8 @@ public class SockServer {
             connectionSocket.close();
         }
 
-
-        PrintInputThread autoPrintThread = new PrintInputThread(connectionSocket, clientName, inputFromClient, true);
+        PrintInputThread autoPrintThread = new PrintInputThread(connectionSocket, clientName, inputFromClient);
         autoPrintThread.start();
-
-
 
         while (!connectionSocket.isClosed()) {
             String sentence = "";

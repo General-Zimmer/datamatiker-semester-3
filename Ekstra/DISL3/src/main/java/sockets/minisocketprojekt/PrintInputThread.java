@@ -2,25 +2,16 @@ package sockets.minisocketprojekt;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class PrintInputThread extends Thread {
     private final Socket sock;
     private final String inputName;
     private final BufferedReader input;
-    private boolean canCloseSocket = false;
     public PrintInputThread(Socket sock, String inputName, BufferedReader input) {
         this.sock = sock;
         this.input = input;
         this.inputName = inputName;
-    }
-
-
-
-    public PrintInputThread(Socket sock, String inputName,BufferedReader input , boolean canCloseSocket) {
-        this(sock, inputName, input);
-        this.canCloseSocket = canCloseSocket;
     }
 
     public void run() {
@@ -28,11 +19,16 @@ public class PrintInputThread extends Thread {
             try {
                 String inputString = "";
                 do {
-                    inputString = input.readLine();
+                    inputString = "";
+
+                    if (input.ready()) {
+                        inputString = input.readLine();
+                    }
+
                     if (inputString == null) {
                         sock.close();
                     } else if (inputString.isBlank()) {
-                        wait(500);
+                        wait(100);
                     } else {
                         System.out.println("Message from " + inputName + ": " + inputString);
                     }
