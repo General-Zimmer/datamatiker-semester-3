@@ -12,7 +12,6 @@
   <modules>
     <module>ProgrammeringsSprog</module>
     <module>AdvancedProgrammering</module>
-    <module>AdvancedProgrammering/L1AP</module>
     <module>Ekstra</module>
     <module>Ekstra/DISL3</module>
   </modules>
