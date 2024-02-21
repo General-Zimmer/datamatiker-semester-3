@@ -14,7 +14,7 @@ public class SockClient {
         String name = inFromUser.readLine();
 
         // Connect to server
-        Socket clientSocket = new Socket("10.10.138.116",6969);
+        Socket clientSocket = new Socket("10.10.139.215",6969);
         DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
         BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         System.out.println("Connected to server");
@@ -25,13 +25,15 @@ public class SockClient {
         String response = inputFromServer.readLine();
         if (response.equals("Nej")) {
             clientSocket.close();
-            System.out.println("Connection refused");
+            System.out.println("Connection refused. Closing connection");
+            return;
         } else if (response.equals("Ja")) {
             System.out.println("Connection successful");
             System.out.println("Type to send message");
         } else {
             System.out.println("Invalid response. Closing connection");
             clientSocket.close();
+            return;
         }
 
         // Start thread to receive messages
@@ -41,6 +43,7 @@ public class SockClient {
         try (clientSocket) {
             String sentence = "";
             do {
+                sentence = "";
                 if (inFromUser.ready())
                     sentence = inFromUser.readLine();
                 if (!sentence.isBlank())
