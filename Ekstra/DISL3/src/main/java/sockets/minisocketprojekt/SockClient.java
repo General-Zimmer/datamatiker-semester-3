@@ -14,7 +14,7 @@ public class SockClient {
         String name = inFromUser.readLine();
 
         // Connect to server
-        Socket clientSocket = new Socket("localhost",6969);
+        Socket clientSocket = new Socket("10.10.138.116",6969);
         DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
         BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         System.out.println("Connected to server");

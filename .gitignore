@@ -38,3 +38,6 @@ build/
 .DS_Store
 
 /out/
+/AdvancedProgrammering/L1AP/.idea/workspace.xml
+/AdvancedProgrammering/L1AP/.idea/jarRepositories.xml
+/AdvancedProgrammering/L1AP/.idea/compiler.xml

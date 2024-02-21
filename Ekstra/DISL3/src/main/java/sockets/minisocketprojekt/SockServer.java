@@ -11,6 +11,7 @@ public class SockServer {
     public static void main(String[] args) throws IOException {
         // setup things
         ServerSocket serverSocket = new ServerSocket(6969);
+        System.out.println("Waiting for connection");
         Socket connectionSocket = serverSocket.accept();
         System.out.println("Connection established");
         DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
