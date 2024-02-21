@@ -31,11 +31,9 @@ public class SockClient {
         Thread autoPrintThread = new PrintInputThread(clientSocket, "Server", inputFromServer);
         autoPrintThread.start();
 
-
         try (clientSocket) {
             String sentence;
             do {
-
                 sentence = inFromUser.readLine();
                 outToServer.writeBytes(sentence + '\n');
             } while (!sentence.equalsIgnoreCase("quit"));
@@ -43,7 +41,5 @@ public class SockClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }
