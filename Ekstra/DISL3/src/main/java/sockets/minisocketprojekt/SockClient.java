@@ -8,15 +8,20 @@ import java.net.Socket;
 
 public class SockClient {
     public static void main(String[] args) throws IOException {
+        // setup things
         BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Gib your name: ");
         String name = inFromUser.readLine();
+
+        // Connect to server
         Socket clientSocket = new Socket("localhost",6969);
         DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
         BufferedReader inputFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         System.out.println("Connected to server");
+        // Send snakke request to server
         outToServer.writeBytes("Snakke " + name + "\n");
 
+        // Check if server wants to talk
         String response = inputFromServer.readLine();
         if (response.equals("Nej")) {
             clientSocket.close();
@@ -29,9 +34,10 @@ public class SockClient {
             clientSocket.close();
         }
 
-        Thread autoPrintThread = new PrintInputThread(clientSocket, "Server", inputFromServer);
-        autoPrintThread.start();
+        // Start thread to receive messages
+        new PrintInputThread(clientSocket, "Server", inputFromServer).start();
 
+        // Send messages to server and stop snak logic
         try (clientSocket) {
             String sentence = "";
             do {
