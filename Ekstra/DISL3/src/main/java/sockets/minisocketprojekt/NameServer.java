@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -17,7 +16,7 @@ public class NameServer {
         ServerSocket serverSocket = new ServerSocket(469);
 
         try (serverSocket){
-            while (true) {
+            while (!serverSocket.isClosed()) {
                 Socket connectionSocket = serverSocket.accept();
                 new NameServerThread(connectionSocket).start();
 
@@ -57,8 +56,6 @@ public class NameServer {
                     outToClient.writeBytes("Invalid request" + '\n');
                 }
             connectionSocket.close();
-            } catch (SocketException e) {
-                throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
