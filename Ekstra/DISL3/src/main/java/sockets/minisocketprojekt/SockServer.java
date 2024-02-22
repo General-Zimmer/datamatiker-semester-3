@@ -13,21 +13,19 @@ public class SockServer {
         ServerSocket serverSocket = new ServerSocket(6969);
         System.out.println("Waiting for connection");
 
-        Socket nameServerSuck = new Socket("localhost", 469);
+        String name = "ZimmyHost";
 
-        DataOutputStream outToNameServer = new DataOutputStream(nameServerSuck.getOutputStream());
-        BufferedReader inputFromNameServer = new BufferedReader(new InputStreamReader(nameServerSuck.getInputStream()));
-        outToNameServer.writeBytes("Register " + "ZimmyHost" + "n" +  "10.10.138.242" + '\n');
-        String nameServerRespond = inputFromNameServer.readLine();
-        if (nameServerRespond.equals("Registered")) {
-            System.out.println("Registered with name server");
-        } else {
-            System.out.println("Failed to register with name server");
-            return;
+        if (Util.sendCommandToNameServer("Register",   name + "n10.10.137.137").equals("Client not found")) {
+            System.out.println("Couldn't register");
         }
 
         Socket connectionSocket = serverSocket.accept() ;
         System.out.println("Connection established");
+
+        if (Util.sendCommandToNameServer("Unregister",  name).equals("Client not found")) {
+            System.out.println("Couldn't unregister " + name + " from nameserver");
+        }
+
         DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
         BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
         BufferedReader inFromServer = new BufferedReader(new InputStreamReader(System.in));
