@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -18,6 +19,23 @@ public class NameServer {
         try (serverSocket){
             while (true) {
                 Socket connectionSocket = serverSocket.accept();
+                new NameServerThread(connectionSocket).start();
+
+            }
+        }
+
+    }
+
+    private static class NameServerThread extends Thread {
+        private final Socket connectionSocket;
+        public NameServerThread(Socket sock) {
+            this.connectionSocket = sock;
+        }
+
+        public void run() {
+            try {
+                connectionSocket.setSoTimeout(10000);
+
                 System.out.println("Connection established");
                 DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
                 BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
@@ -38,9 +56,14 @@ public class NameServer {
                 } else {
                     outToClient.writeBytes("Invalid request" + '\n');
                 }
-                connectionSocket.close();
+            connectionSocket.close();
+            } catch (SocketException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
 
     }
+
 }
