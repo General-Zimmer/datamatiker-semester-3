@@ -16,28 +16,30 @@ public class PrintInputThread extends Thread {
         this.inputName = inputName;
     }
 
-    public void run() {
-        synchronized (this) {
-            try {
-                String inputString;
-                do {
-                    inputString = input.readLine();
-                    if (inputString == null) {
-                        sock.close();
-                    } else {
-                        System.out.println("Message from " + inputName + ": " + inputString);
-                    }
-                } while (!sock.isClosed());
-            } catch (IOException e) {
-                if (e.getMessage().equals("Connection reset")) {
-                    try {
-                        sock.close();
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
+    public synchronized void run() {
+        try {
+            String inputString;
+            do {
+                inputString = input.readLine();
+                if (inputString == null) {
+                    sock.close();
+                } else {
+                    System.out.println("Message from " + inputName + ": " + inputString);
                 }
-                System.out.println(e.getMessage());
+            } while (!sock.isClosed());
+        } catch (IOException e) {
+            if (e.getMessage().equals("Connection reset")) {
+                closeSocket();
             }
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void closeSocket() {
+        try {
+            sock.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class NameServer {
 
-    private static HashMap<String, String> nameServer = new HashMap<>();
+    private static final HashMap<String, String> nameServer = new HashMap<>();
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(469);
 
