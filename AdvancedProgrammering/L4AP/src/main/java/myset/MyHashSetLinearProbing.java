@@ -29,15 +29,25 @@ public class MyHashSetLinearProbing<E> implements MySet<E> {
     /** Return true if the element is in the set */
     @Override
     public boolean contains(E e) {
-        // TODO
-        return false;
+        int hash = Math.abs(e.hashCode()) % table.length;
+        int originalHash = hash;
+
+        while(true){
+            if(table[hash] != null && table[hash].equals(e)){
+                return true;
+            }
+            hash = (++hash) % table.length;
+            if(hash == originalHash){
+                return false;
+            }
+        }
     }
 
-    /** Remove all elements from this set */
     @Override
+    /** Remove all elements from this set */
     public void clear() {
-        size = 0;
         table = (E[]) new Object[table.length];
+        size = 0;
     }
 
     /**
@@ -46,8 +56,25 @@ public class MyHashSetLinearProbing<E> implements MySet<E> {
      * @return true if e is a new object, false if e was already in the set
      */
     public boolean add(E e) {
-        // TODO
-        return false;
+        int hash = Math.abs(e.hashCode()) % table.length;
+        int originalHash = hash;
+
+        while(true){
+            if(table[hash] == null || table[hash].equals(DELETED)){
+                table[hash] = e;
+                size++;
+                return true;
+            }
+
+            if(table[hash].equals(e)){
+                return false;
+            }
+
+            hash = (++hash) % table.length;
+            if(hash == originalHash){
+                return false;
+            }
+        }
     }
 
     /**
@@ -57,19 +84,29 @@ public class MyHashSetLinearProbing<E> implements MySet<E> {
      * element of this set
      */
     public boolean remove(E e) {
-        // TODO
-        return false;
+        int hash = Math.abs(e.hashCode()) % table.length;
+        int originalHash = hash;
+        while(true){
+            if(table[hash] != null && table[hash].equals(e)){
+                table[hash] = DELETED;
+                size--;
+                return true;
+            }
+            hash = (++hash) % table.length;
+            if(hash == originalHash){
+                return false;
+            }
+        }
     }
 
+    @Override
     /** Return the number of elements in the set */
-    @Override
     public int size() {
-        // TODO
-        return -1;
+        return size;
     }
 
-    /** Return true if the set contains no elements */
     @Override
+    /** Return true if the set contains no elements */
     public boolean isEmpty() {
         return size == 0;
     }
@@ -81,6 +118,5 @@ public class MyHashSetLinearProbing<E> implements MySet<E> {
             System.out.println(i + "\t" + table[i]);
         }
     }
-
 
 }

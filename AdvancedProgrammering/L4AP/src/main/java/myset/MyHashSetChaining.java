@@ -101,7 +101,7 @@ public class MyHashSetChaining<E> implements MySet<E> {
 
     private void rehash() {
         Node<E>[] tempArray = table;
-        table = (Node<E>[]) new Node[table.length * 2];
+        table = (Node<E>[]) new Node[table.length * 2 + 1];
         size = 0;
 
         for (Node<E> node : tempArray) {
