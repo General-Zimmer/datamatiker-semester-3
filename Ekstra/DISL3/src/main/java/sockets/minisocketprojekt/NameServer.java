@@ -16,8 +16,24 @@ public class NameServer {
         ServerSocket serverSocket = new ServerSocket(469);
 
         try (serverSocket){
-            while (true) {
+            while (!serverSocket.isClosed()) {
                 Socket connectionSocket = serverSocket.accept();
+                new NameServerThread(connectionSocket).start();
+            }
+        }
+
+    }
+
+    private static class NameServerThread extends Thread {
+        private final Socket connectionSocket;
+        public NameServerThread(Socket sock) {
+            this.connectionSocket = sock;
+        }
+
+        public void run() {
+            try {
+                connectionSocket.setSoTimeout(10000);
+
                 System.out.println("Connection established");
                 DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
                 BufferedReader inputFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
@@ -35,12 +51,21 @@ public class NameServer {
                     String ip = nameServer.get(name);
                     outToClient.writeBytes(Objects.requireNonNullElse(ip, "Client not found") + '\n');
                     System.out.println("Looked up " + name + " and found IP " + ip);
-                } else {
+                } else if (message.startsWith("Unregister")) {
+                    String name = message.substring(11);
+                    String ip = nameServer.remove(name);
+                    outToClient.writeBytes(Objects.requireNonNullElse(ip, "Client not found") + '\n');
+                    System.out.println("Unregistered " + name + " with IP " + ip);
+
+                }else {
                     outToClient.writeBytes("Invalid request" + '\n');
                 }
-                connectionSocket.close();
+            connectionSocket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
 
     }
+
 }
