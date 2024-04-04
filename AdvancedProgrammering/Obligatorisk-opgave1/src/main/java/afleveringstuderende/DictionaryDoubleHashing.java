@@ -20,6 +20,13 @@ public class DictionaryDoubleHashing <K, V> implements Dictionary<K, V> {
         return hashCode % table.length;
     }
 
+    private int hash2(int hashCode) {
+        if (hashCode < 0) {
+            hashCode = -hashCode;
+        }
+        return 7 - (hashCode % 7);
+    }
+
     // Tidskompleksitet: O(n)
     @Override
     public V get(K key) {
@@ -33,7 +40,7 @@ public class DictionaryDoubleHashing <K, V> implements Dictionary<K, V> {
                 found = true;
                 returnValue = current.value;
             } else {
-                bucketIndex = hash(7 - (bucketIndex%7));
+                bucketIndex = hash2(bucketIndex);
                 current = table[bucketIndex];
                 searchTime--;
             }
@@ -51,6 +58,9 @@ public class DictionaryDoubleHashing <K, V> implements Dictionary<K, V> {
     @Override
     public V put(K key, V value) {
 
+        if ((double) size / table.length > 0.5) {
+            rehash();
+        }
         int bucketIndex = hash(key.hashCode());
         Entry<K, V> current = table[bucketIndex];
         boolean found = false;
@@ -61,16 +71,13 @@ public class DictionaryDoubleHashing <K, V> implements Dictionary<K, V> {
                 returnValue = current.value;
                 current.value = value;
             } else {
-                bucketIndex = hash(7 - (bucketIndex%7));
+                bucketIndex = hash2(bucketIndex);
                 current = table[bucketIndex];
             }
         }
 
         if (!found) {
-            if ((double) size / table.length > 0.5) {
-                rehash();
-                bucketIndex = hash(value.hashCode());
-            }
+
             Entry<K, V> newEntry = new Entry<>(key, value);
             newEntry.value = value;
             table[bucketIndex] = newEntry;
@@ -106,7 +113,7 @@ public class DictionaryDoubleHashing <K, V> implements Dictionary<K, V> {
                 table[bucketIndex] = DELETED;
                 size--;
             } else {
-                bucketIndex = hash(7 - (bucketIndex%7));
+                bucketIndex = hash2(bucketIndex);
                 current = table[bucketIndex];
                 searchTime--;
             }
