@@ -7,7 +7,6 @@ public class DictionaryTest {
         DictionaryDoubleHashing<Integer, String> testDictionar = new DictionaryDoubleHashing<>(10);
         // Ville ønske opgaven sagde et ulige tal, for så skulle jeg ikke undgå at få en kollision indtil rehashing.
         // Eller at jeg selv må komme op med en hash2 metode.
-
         testDictionar.put(27, "Person1");
         testDictionar.put(270, "Person2");
         testDictionar.put(13, "Person3");
