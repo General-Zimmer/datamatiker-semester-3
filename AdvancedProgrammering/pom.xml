@@ -15,6 +15,7 @@
     <modules>
         <module>L4AP</module>
         <module>Obligatorisk-opgave1</module>
+        <module>L6</module>
     </modules>
 
     <properties>
