@@ -15,6 +15,7 @@
     <modules>
         <module>DISL10</module>
         <module>DISL17</module>
+        <module>DISL21</module>
     </modules>
 
     <properties>
