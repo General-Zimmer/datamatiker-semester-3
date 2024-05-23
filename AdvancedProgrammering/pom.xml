@@ -17,6 +17,7 @@
         <module>Obligatorisk-opgave1</module>
         <module>L6</module>
         <module>L8AP</module>
+        <module>L9AP</module>
     </modules>
 
     <properties>

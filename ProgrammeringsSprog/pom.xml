@@ -15,6 +15,7 @@
     <modules>
         <module>L1PS</module>
         <module>L5PS</module>
+        <module>OBL-OpgaveKotlin</module>
     </modules>
 
     <properties>
