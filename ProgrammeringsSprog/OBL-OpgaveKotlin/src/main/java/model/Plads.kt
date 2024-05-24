@@ -1,5 +1,8 @@
 package model
 
+import controller.Controller
+import java.time.LocalDateTime
+
 open class Plads(val nr : Int, val omraade: Omraade) : Comparable<Plads>{
     val reservationer: MutableList<Reservation> = mutableListOf()
 
@@ -29,5 +32,12 @@ open class Plads(val nr : Int, val omraade: Omraade) : Comparable<Plads>{
             Omraade.TURNERING -> 3
             Omraade.VIP -> 4
         }
+    }
+    fun samletReservationstid(fra : LocalDateTime, til : LocalDateTime) : Int {
+        val reserves = reservationer.filter { it.slut.isBefore(til) || it.start.isBefore(fra)}.fold(0) { accu, reserve ->
+            reserve.slut.minusHours(reserve.start.hour.toLong()).hour + accu
+        }
+
+        return reserves;
     }
 }

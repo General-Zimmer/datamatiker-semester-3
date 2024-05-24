@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="446.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="43.0" layoutY="38.0" text="Pladser:" />
+      <ListView layoutX="43.0" layoutY="67.0" prefHeight="200.0" prefWidth="200.0" />
+      <Button layoutX="276.0" layoutY="76.0" mnemonicParsing="false" text="Opret Standard Plads" />
+      <Label layoutX="20.0" layoutY="286.0" text="Område:" />
+      <RadioButton layoutX="84.0" layoutY="286.0" mnemonicParsing="false" text="STANDARD">
+         <toggleGroup>
+            <ToggleGroup fx:id="omraade" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton layoutX="84.0" layoutY="312.0" mnemonicParsing="false" text="VIP" toggleGroup="$omraade" />
+      <RadioButton layoutX="84.0" layoutY="336.0" mnemonicParsing="false" text="BØRNE" toggleGroup="$omraade" />
+      <RadioButton layoutX="84.0" layoutY="362.0" mnemonicParsing="false" text="TURNERING" toggleGroup="$omraade" />
+      <Label layoutX="18.0" layoutY="399.0" text="Nummer:" />
+      <Label layoutX="8.0" layoutY="429.0" text="Fundet plads:" />
+      <TextField layoutX="84.0" layoutY="387.0" />
+      <TextField layoutX="84.0" layoutY="425.0" />
+      <Button layoutX="255.0" layoutY="387.0" mnemonicParsing="false" text="Find plads" />
+   </children>
+</AnchorPane>

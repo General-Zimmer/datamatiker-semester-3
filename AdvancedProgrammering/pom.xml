@@ -18,6 +18,7 @@
         <module>L6</module>
         <module>L8AP</module>
         <module>L9AP</module>
+        <module>L11AP</module>
     </modules>
 
     <properties>

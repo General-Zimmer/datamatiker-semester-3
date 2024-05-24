@@ -4,6 +4,7 @@ import model.*
 import storage.Storage
 import java.time.LocalDateTime
 import java.time.Period
+import java.time.temporal.TemporalAmount
 
 object Controller {
 
@@ -48,6 +49,23 @@ object Controller {
 
         fun linkReservationAndArrangement(arrangement: Arrangement, reservation: Reservation) {
             arrangement.reservation.add(reservation)
+        }
+
+        fun reservationsTidPåOmråde(omraade: Omraade, fra: LocalDateTime, til: LocalDateTime) : Int {
+            val pladser = storage.pladser.filter { it.omraade.equals(omraade)}
+
+            val reserver: MutableList<Reservation> = mutableListOf()
+            pladser.forEach { plads ->
+                plads.reservationer.forEach {
+                    if (it.slut.isBefore(til) || it.start.isBefore(fra)) {
+                        reserver.add(it)
+                    }
+                }
+            }
+
+            return reserver.fold(0) { accu, reserve ->
+                reserve.slut.minusHours(reserve.start.hour.toLong()).hour + accu
+            }
         }
     }
 }
